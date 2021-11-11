@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nancy;
+﻿using Nancy;
 using Nancy.Extensions;
 using Newtonsoft.Json;
 using Properties;
@@ -37,27 +31,24 @@ namespace APItest.Nancy.Controller
 
             #region Calculator
 
-            Post("/v1/calc", x =>
+            Post("/v1/Price", x =>
             {
+                //Objeto a modificar con el POST
                 var product = new Product();
+                //Obtengo el raw
                 var rawRequest = Context.Request.Body.AsString();
+                //Lo paso a la clase
+                product = JsonConvert.DeserializeObject<Product>(rawRequest);
 
-                //product.Name = "Papa";
-                //product.Price = 4;
+                //Modifico las propiedades
+                product.Price = product.Price + 1;
 
-                //string output = JsonConvert.SerializeObject(product);
-
-                Product dProduct = JsonConvert.DeserializeObject<Product>(rawRequest);
-
-                dProduct.Price = dProduct.Price + 1;
-
-                string output = JsonConvert.SerializeObject(dProduct);
-
+                //Lo serializo como Json para entregar como respuesta
+                string output = JsonConvert.SerializeObject(product);
                 return output;
             });
 
             #endregion
-
         }
     }
 }
